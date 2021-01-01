@@ -169,36 +169,50 @@ int player_turn(int new_popul[10][8]) {
 // Применение действий особей
 int turn(int players[10][3], int turn_list[10], int check_list[10], int game_board[100]) {
 
-	bool flag = false;
 	// Вывод нынешнего состояния доски
 	cout << "\n" << "Map:" << endl;
-	for (int j = 0; j < 100; j++) { 
+	for (int j = 0; j < 100; j++) {  // Проходит по всем клеткам доски
+		bool is_written = false; // Записано ли число?
+		bool occupied = false; // Место уже занято игроком?
+
+		// Проходит по всем минам
 		for (int i = 0; i < 10; i++) {
+			bool on_a_mine = false; // Игрок стоит на мине i?
+			bool re_on_a_mine = false; // Мина и игрок i на одной клетке?
 
-			if (min_pos[i] != players[i][1]) {
-				
-				// 1 - мина
-				if (j == min_pos[i]) {
-					cout << "1";
-					flag = true;
-				}
+			// Проверка стоит ли игрок на мине i
+			for (int k = 0; k < 10; k++) {
+				if (min_pos[i] == players[k][1]) on_a_mine = true;
+				if (players[i][1] == min_pos[k]) re_on_a_mine = true;
+			}
 
-				// 2 - игроки
-				if (j == players[i][1] && flag == false) {
-					cout << "2";
-					flag = true;
-				}
+			// 1 - мина
+			if (j == min_pos[i] && on_a_mine == false) {
+				cout << "1 ";
+				is_written = true;
+			}
+
+			// 2 - игроки
+			if (j == players[i][1] && occupied == false && re_on_a_mine == false) {
+				cout << "2 ";
+				occupied = true;
+				is_written = true;
 			}
 
 			// 3 - игрок наступил на мину
-			else {
-				cout << "3";
-				flag = true;
+			if (j == min_pos[i] && on_a_mine == true) {
+				cout << "3 "; 
+				is_written = true;
 			}
+
+			on_a_mine = false;
+			re_on_a_mine = false;
 		}
-		if (flag == false) cout << 0;
+
+		if (is_written != true) cout << "0 "; // 0 - пустая клетка
 		if (j % 10 == 9) cout << endl;
-		flag = false;
+		is_written = false;
+		occupied = false;
 	}
 	
 	int there_is_mine[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // Есть ли мина на стороне, котарая проверяется? (0 - нет/1 - да)
