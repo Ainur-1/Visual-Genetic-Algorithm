@@ -334,6 +334,11 @@ int game() {
 		player_turn(new_popul);
 		turn(players, turn_list, check_list, game_board);
 	}
+	
+	// Вывод списока о кол-ве шагов игроков
+	for (int i = 0; i < 10; i++) {
+		cout << i << " " << players[i][2] << endl;
+	}
 
 	return 0;
 }
