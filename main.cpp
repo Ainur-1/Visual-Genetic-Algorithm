@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <array>
 #include <cstdlib>
 #include <ctime>
@@ -29,7 +29,7 @@ void printPopulation(int Generation_Number, std::array<std::array<int, 4>, 10> n
     }
 }
 
-// Генерация начальной популяции с случайными коэффициентами
+// Р“РµРЅРµСЂР°С†РёСЏ РЅР°С‡Р°Р»СЊРЅРѕР№ РїРѕРїСѓР»СЏС†РёРё СЃ СЃР»СѓС‡Р°Р№РЅС‹РјРё РєРѕСЌС„С„РёС†РёРµРЅС‚Р°РјРё
 std::array<std::array<int, 4>, 10> initial_population() {
     std::array<std::array<int, 4>, 10> new_popul;
 
@@ -42,24 +42,67 @@ std::array<std::array<int, 4>, 10> initial_population() {
     return new_popul;
 }
 
-//// Оценка приспособленности особей (в данном случае - близость к корню)
-//double fitness_evaluation(double coefficients[10][4], double target_root) {
-//    double fitness[10];
-//    for (int i = 0; i < 10; i++) {
-//        double result = coefficients[i][0] + coefficients[i][1] * target_root +
-//            coefficients[i][2] * target_root * target_root +
-//            coefficients[i][3] * target_root * target_root * target_root;
-//        fitness[i] = 1.0 / std::abs(result - target_root);
-//    }
-//    // Здесь можно также нормализовать приспособленность, чтобы сумма была 1.
-//    return fitness;
-//}
-//
-//// Выбор особей для следующего поколения
+std::array<double, 3> solveCubicEquation(const std::array<int, 4>& coefficients) {
+    double a = coefficients[0];
+    double b = coefficients[1];
+    double c = coefficients[2];
+    double d = coefficients[3];
+
+    // Calculate discriminants and intermediate values
+    double discriminant = 18 * a * b * c * d - 4 * b * b * b * d + b * b * c * c - 4 * a * c * c * c - 27 * a * a * d * d;
+    double delta0 = b * b - 3 * a * c;
+    double delta1 = 2 * b * b * b - 9 * a * b * c + 27 * a * a * d;
+
+    // Calculate roots
+    std::array<double, 3> roots;
+
+    if (discriminant > 0) {
+        double C = cbrt((delta1 + sqrt(discriminant)) / 2.0);
+        double D = cbrt((delta1 - sqrt(discriminant)) / 2.0);
+        roots[0] = (-b + C + D) / (3 * a);
+    }
+    else if (discriminant == 0) {
+        roots[0] = -b / (3 * a);
+    }
+    else {
+        double phi = acos(delta1 / (2 * sqrt(-delta0 * delta0 * delta0)));
+        double magnitude = 2 * sqrt(-delta0);
+        const double pi = 3.14159265358979323846; // Р§РёСЃР»Рѕ ПЂ
+        roots[0] = magnitude * cos(phi / 3) - b / (3 * a);
+        roots[1] = magnitude * cos((phi + 2 * pi) / 3) - b / (3 * a);
+        roots[2] = magnitude * cos((phi + 4 * pi) / 3) - b / (3 * a);
+    }
+
+    return roots;
+}
+
+// РћС†РµРЅРєР° РїСЂРёСЃРїРѕСЃРѕР±Р»РµРЅРЅРѕСЃС‚Рё РѕСЃРѕР±РµР№ (Р±Р»РёР·РѕСЃС‚СЊ Рє РєРѕСЂРЅСЏРј)
+std::array<double, 10> fitness_evaluation(const std::array<std::array<int, 4>, 10>& population,
+    const std::array<double, 3>& target_roots) {
+    std::array<double, 10> fitness;
+
+    for (int i = 0; i < 10; i++) {
+        double total_distance = 0.0;
+
+        for (int j = 0; j < 3; j++) {
+            std::array<double, 3> roots = solveCubicEquation(population[i]);
+            for (int k = 0; k < 3; k++) {
+                double distance = std::abs(roots[k] - target_roots[j]);
+                total_distance += distance;
+            }
+        }
+
+        fitness[i] = 1.0 / total_distance;
+    }
+
+    return fitness;
+}
+
+//// Р’С‹Р±РѕСЂ РѕСЃРѕР±РµР№ РґР»СЏ СЃР»РµРґСѓСЋС‰РµРіРѕ РїРѕРєРѕР»РµРЅРёСЏ
 //void selection(double coefficients[10][4]) {
-//    // Здесь реализация выбора особей для создания следующего поколения
-//    // Можно использовать методы селекции, такие как рулеточное колесо или турнирная селекция.
-//    // sellist будет хранить индексы выбранных особей.
+//    // Р—РґРµСЃСЊ СЂРµР°Р»РёР·Р°С†РёСЏ РІС‹Р±РѕСЂР° РѕСЃРѕР±РµР№ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ СЃР»РµРґСѓСЋС‰РµРіРѕ РїРѕРєРѕР»РµРЅРёСЏ
+//    // РњРѕР¶РЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РјРµС‚РѕРґС‹ СЃРµР»РµРєС†РёРё, С‚Р°РєРёРµ РєР°Рє СЂСѓР»РµС‚РѕС‡РЅРѕРµ РєРѕР»РµСЃРѕ РёР»Рё С‚СѓСЂРЅРёСЂРЅР°СЏ СЃРµР»РµРєС†РёСЏ.
+//    // sellist Р±СѓРґРµС‚ С…СЂР°РЅРёС‚СЊ РёРЅРґРµРєСЃС‹ РІС‹Р±СЂР°РЅРЅС‹С… РѕСЃРѕР±РµР№.
 //}
 
 int main() {
@@ -67,17 +110,17 @@ int main() {
 
     std::cout << "New Genetic Algorithm for Cubic Equation\n\n";
 
-    std::array<int, 4> coefficients; // Коэффициенты кубического уравнения
+    std::array<int, 4> coefficients; // РљРѕСЌС„С„РёС†РёРµРЅС‚С‹ РєСѓР±РёС‡РµСЃРєРѕРіРѕ СѓСЂР°РІРЅРµРЅРёСЏ
 
-    // Ввод коэффициентов
+    // Р’РІРѕРґ РєРѕСЌС„С„РёС†РёРµРЅС‚РѕРІ
     std::cout << "Enter the coefficients a, b, c, and d: " << std::endl;
     for (int i = 0; i < 4; i++) {
         std::cin >> coefficients[i];
     }
 
-    std::array<double, 3> roots; // Корни кубического уравнения
+    std::array<double, 3> roots; // РљРѕСЂРЅРё РєСѓР±РёС‡РµСЃРєРѕРіРѕ СѓСЂР°РІРЅРµРЅРёСЏ
 
-    // Ввод корней
+    // Р’РІРѕРґ РєРѕСЂРЅРµР№
     std::cout << std::endl << "Enter the roots a, b, and c: " << std::endl;
     for (int i = 0; i < 3; i++) {
         std::cin >> roots[i];
@@ -94,23 +137,24 @@ int main() {
     std::array<std::array<int, 4>, 10> new_popul = initial_population();
     printPopulation(Generation_Number, new_popul);
 
-    //// Основной цикл генетического алгоритма
-    //while (/*условие остановки*/) {
-    //    // Оценка приспособленности
-    //    double fitness_values[10];
-    //    fitness_values = fitness_evaluation(coefficients, target_root);
+    std::array<double, 3> roots = solveCubicEquation(coefficients);
 
-    //    // Выбор особей для следующего поколения
-    //    selection(coefficients);
+    // РћСЃРЅРѕРІРЅРѕР№ С†РёРєР» РіРµРЅРµС‚РёС‡РµСЃРєРѕРіРѕ Р°Р»РіРѕСЂРёС‚РјР°
+    while (true) {
+        // РћС†РµРЅРєР° РїСЂРёСЃРїРѕСЃРѕР±Р»РµРЅРЅРѕСЃС‚Рё
+        std::array<double, 10> fitness_values = fitness_evaluation(new_popul, roots);
 
-    //    // Создание новой популяции на основе выбранных особей
-    //    // Мутация и скрещивание могут быть реализованы здесь
+        // Р’С‹Р±РѕСЂ РѕСЃРѕР±РµР№ РґР»СЏ СЃР»РµРґСѓСЋС‰РµРіРѕ РїРѕРєРѕР»РµРЅРёСЏ
+        //selection(coefficients);
 
-    //    Generation_Number++;
-    //}
+        // РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕР№ РїРѕРїСѓР»СЏС†РёРё РЅР° РѕСЃРЅРѕРІРµ РІС‹Р±СЂР°РЅРЅС‹С… РѕСЃРѕР±РµР№
+        // РњСѓС‚Р°С†РёСЏ Рё СЃРєСЂРµС‰РёРІР°РЅРёРµ РјРѕРіСѓС‚ Р±С‹С‚СЊ СЂРµР°Р»РёР·РѕРІР°РЅС‹ Р·РґРµСЃСЊ
 
-    // Вывод результирующего уравнения
-    // Здесь можно взять лучший набор коэффициентов и вывести полученное уравнение
+        Generation_Number++;
+    }
+
+    // Р’С‹РІРѕРґ СЂРµР·СѓР»СЊС‚РёСЂСѓСЋС‰РµРіРѕ СѓСЂР°РІРЅРµРЅРёСЏ
+    // Р—РґРµСЃСЊ РјРѕР¶РЅРѕ РІР·СЏС‚СЊ Р»СѓС‡С€РёР№ РЅР°Р±РѕСЂ РєРѕСЌС„С„РёС†РёРµРЅС‚РѕРІ Рё РІС‹РІРµСЃС‚Рё РїРѕР»СѓС‡РµРЅРЅРѕРµ СѓСЂР°РІРЅРµРЅРёРµ
 
     return 0;
 }
