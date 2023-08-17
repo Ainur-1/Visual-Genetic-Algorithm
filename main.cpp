@@ -2,6 +2,7 @@
 #include <array>
 #include <cstdlib>
 #include <ctime>
+#include <cmath>
 
 void printFormattedNumber(int num) {
     if (num == 100)
@@ -12,7 +13,11 @@ void printFormattedNumber(int num) {
         std::cout << " " << num << " ";
 }
 
-void printPopulation(std::array<std::array<int, 4>, 10> new_popul) {
+void printPopulation(int Generation_Number, std::array<std::array<int, 4>, 10> new_popul) {
+
+    std::cout << "\nGeneration " << Generation_Number << std::endl;
+    std::cout << " Chromosome " << "     a   b   c   d " << "\n\n";
+
     for (int i = 0; i < 10; i++) {
         std::cout << "Individual " << i << "   ";
 
@@ -59,20 +64,35 @@ std::array<std::array<int, 4>, 10> initial_population() {
 
 int main() {
     srand(time(NULL));
+
+    std::cout << "New Genetic Algorithm for Cubic Equation\n\n";
+
+    std::array<int, 4> coefficients; // Коэффициенты кубического уравнения
+
+    // Ввод коэффициентов
+    std::cout << "Enter the coefficients a, b, c, and d: " << std::endl;
+    for (int i = 0; i < 4; i++) {
+        std::cin >> coefficients[i];
+    }
+
+    std::array<double, 3> roots; // Корни кубического уравнения
+
+    // Ввод корней
+    std::cout << std::endl << "Enter the roots a, b, and c: " << std::endl;
+    for (int i = 0; i < 3; i++) {
+        std::cin >> roots[i];
+    }
+
+    std::cout << std::endl << "Cubic Equation: " << coefficients[0] << "x^3 + "
+        << coefficients[1] << "x^2 + " << coefficients[2] << "x + " << coefficients[3] << " = 0" << std::endl;
+
+    std::cout << "Equation Roots: " << roots[0] << ", " << roots[1] << ", " << roots[2] << std::endl;
     
     int Generation_Number = 1;
     int sellist[4];
 
-    std::cout << "New Genetic Algorithm for Cubic Equation\n\n";
-    std::cout << "\nGeneration " << Generation_Number << std::endl;
-    std::cout << " Chromosome " << "     a   b   c   d " << "\n\n";
-
     std::array<std::array<int, 4>, 10> new_popul = initial_population();
-
-    printPopulation(new_popul);
-
-    double target_root = 3.0; // Корень, который мы хотим найти
-    double coefficients[10][4]; // Коэффициенты кубического уравнения
+    printPopulation(Generation_Number, new_popul);
 
     //// Основной цикл генетического алгоритма
     //while (/*условие остановки*/) {
