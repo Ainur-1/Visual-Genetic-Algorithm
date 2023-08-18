@@ -129,8 +129,45 @@ std::array<int, 5> selection(const std::array<double, 10>& fitness) {
     return sellist;
 }
 
+// Создание новой популяции на основе выбранных особей
+std::array<std::array<int, 4>, 10> createNewPopulation(const std::array<std::array<int, 4>, 10>& old_popul, const std::array<int, 5>& sellist) {
+    std::array<std::array<int, 4>, 10> new_popul;
+
+    // Копирование выбранных особей в новую популяцию
+    for (int i = 0; i < 5; i++) {
+        new_popul[i] = old_popul[sellist[i]];
+    }
+
+    // Генерация новых особей (потомков) через скрещивание
+    for (int i = 5; i < 10; i++) {
+        int parent1Index = rand() % 5; // Выбор случайного родителя из выбранных особей
+        int parent2Index = rand() % 5; // Выбор еще одного случайного родителя из выбранных особей
+
+        // Производим скрещивание (можно использовать простое скрещивание с одной точкой)
+        int crossoverPoint = rand() % 4; // Выбор случайной точки скрещивания
+
+        for (int j = 0; j < 4; j++) {
+            if (j < crossoverPoint) {
+                new_popul[i][j] = old_popul[sellist[parent1Index]][j];
+            }
+            else {
+                new_popul[i][j] = old_popul[sellist[parent2Index]][j];
+            }
+        }
+
+        // Производим мутацию
+        int mutationGeneIndex = rand() % 4; // Выбор случайного гена для мутации
+        new_popul[i][mutationGeneIndex] = rand() % 101; // Мутируем ген случайным значением
+    }
+
+    return new_popul;
+}
+
+
 int main() {
     srand(time(NULL));
+
+    const int MAX_GENERATIONS = 100; // Максимальное количество поколений
 
     std::cout << "New Genetic Algorithm for Cubic Equation\n\n";
 
@@ -168,14 +205,25 @@ int main() {
     Также мутация будет менят некоторыхе хромосомы в некоторых особях, которое будет выбираться рандомом.*/
 
         // Создание новой популяции на основе выбранных особей
-        
-        // Мутация 
+        new_popul = createNewPopulation(new_popul, sellist);
 
         Generation_Number++;
-    }
 
-    // Вывод результирующего уравнения
-    // Здесь можно взять лучший набор коэффициентов и вывести полученное уравнение
+        // После определенного количества поколений, выводим наилучшее уравнение
+        if (Generation_Number == MAX_GENERATIONS) {
+            int bestIndividualIndex = sellist[0]; // Индекс самой приспособленной особи
+            std::array<int, 4> bestCoefficients = new_popul[bestIndividualIndex]; // Коэффициенты этой особи
+
+            std::cout << "\nBest Equation after " << MAX_GENERATIONS << " Generations:\n";
+            std::cout << "Cubic Equation: " << bestCoefficients[0] << "x^3 + "
+                << bestCoefficients[1] << "x^2 + " << bestCoefficients[2] << "x + " << bestCoefficients[3] << " = 0" << std::endl;
+
+            std::array<double, 3> bestRoots = solveCubicEquation(bestCoefficients); // Корни уравнения
+            std::cout << "Equation Roots: " << bestRoots[0] << ", " << bestRoots[1] << ", " << bestRoots[2] << std::endl;
+
+            break; // Завершаем цикл после вывода результата
+        }
+    }
 
     return 0;
 }
