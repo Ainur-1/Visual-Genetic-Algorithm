@@ -4,6 +4,7 @@
 #include <ctime>
 #include <cmath>
 
+// Вывод числа в формате с отступами
 void printFormattedNumber(int num) {
     if (num == 100)
         std::cout << num << " ";
@@ -13,6 +14,7 @@ void printFormattedNumber(int num) {
         std::cout << " " << num << " ";
 }
 
+// Вывод текущей популяции
 void printPopulation(int Generation_Number, std::array<std::array<int, 4>, 10> new_popul) {
 
     std::cout << "\nGeneration " << Generation_Number << std::endl;
@@ -42,6 +44,7 @@ std::array<std::array<int, 4>, 10> initial_population() {
     return new_popul;
 }
 
+// Решение кубического уравнения
 std::array<double, 3> solveCubicEquation(const std::array<int, 4>& coefficients) {
     double a = coefficients[0];
     double b = coefficients[1];
