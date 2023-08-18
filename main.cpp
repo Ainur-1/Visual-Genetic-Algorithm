@@ -98,12 +98,36 @@ std::array<double, 10> fitness_evaluation(const std::array<std::array<int, 4>, 1
     return fitness;
 }
 
-//// Выбор особей для следующего поколения
-//void selection(double coefficients[10][4]) {
-//    // Здесь реализация выбора особей для создания следующего поколения
-//    // Можно использовать методы селекции, такие как рулеточное колесо или турнирная селекция.
-//    // sellist будет хранить индексы выбранных особей.
-//}
+// Выбор особей для следующего поколения
+std::array<int, 5> selection(const std::array<double, 10>& fitness) {
+    std::array<int, 5> sellist;
+
+    for (int i = 0; i < 5; i++) {
+        int maxIndex = 0;
+        double maxFitness = -1.0;
+
+        for (int j = 0; j < 10; j++) {
+            if (fitness[j] > maxFitness) {
+                bool isAlreadySelected = false;
+                for (int k = 0; k < i; k++) {
+                    if (sellist[k] == j) {
+                        isAlreadySelected = true;
+                        break;
+                    }
+                }
+
+                if (!isAlreadySelected) {
+                    maxIndex = j;
+                    maxFitness = fitness[j];
+                }
+            }
+        }
+
+        sellist[i] = maxIndex;
+    }
+
+    return sellist;
+}
 
 int main() {
     srand(time(NULL));
@@ -118,26 +142,19 @@ int main() {
         std::cin >> coefficients[i];
     }
 
-    std::array<double, 3> roots; // Корни кубического уравнения
+    std::array<double, 3> roots = solveCubicEquation(coefficients); // Корни кубического уравнения
 
-    // Ввод корней
-    std::cout << std::endl << "Enter the roots a, b, and c: " << std::endl;
-    for (int i = 0; i < 3; i++) {
-        std::cin >> roots[i];
-    }
 
     std::cout << std::endl << "Cubic Equation: " << coefficients[0] << "x^3 + "
         << coefficients[1] << "x^2 + " << coefficients[2] << "x + " << coefficients[3] << " = 0" << std::endl;
 
     std::cout << "Equation Roots: " << roots[0] << ", " << roots[1] << ", " << roots[2] << std::endl;
-    
+
     int Generation_Number = 1;
-    int sellist[4];
+    std::array<int, 5> sellist; // Массив наиболее приспособленных.
 
     std::array<std::array<int, 4>, 10> new_popul = initial_population();
     printPopulation(Generation_Number, new_popul);
-
-    std::array<double, 3> roots = solveCubicEquation(coefficients);
 
     // Основной цикл генетического алгоритма
     while (true) {
@@ -145,10 +162,14 @@ int main() {
         std::array<double, 10> fitness_values = fitness_evaluation(new_popul, roots);
 
         // Выбор особей для следующего поколения
-        //selection(coefficients);
+        sellist = selection(fitness_values);
+        
+        /*По логике будет 5 прислпособленнейших и генерироваться 5 новых.
+    Также мутация будет менят некоторыхе хромосомы в некоторых особях, которое будет выбираться рандомом.*/
 
         // Создание новой популяции на основе выбранных особей
-        // Мутация и скрещивание могут быть реализованы здесь
+        
+        // Мутация 
 
         Generation_Number++;
     }
