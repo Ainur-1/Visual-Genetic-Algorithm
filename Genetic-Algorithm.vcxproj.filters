@@ -21,7 +21,7 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GenePool.cpp">
+    <ClCompile Include="Population.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CubicEquation.cpp">
@@ -35,7 +35,7 @@
     <ClInclude Include="Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GenePool.h">
+    <ClInclude Include="Population.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CubicEquation.h">

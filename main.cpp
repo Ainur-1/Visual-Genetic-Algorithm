@@ -5,7 +5,7 @@
 #include <cmath>
 #include "CubicEquation.h"
 #include "Entity.h"
-#include "GenePool.h"
+#include "Population.h"
 
 // Вывод числа в формате с отступами
 void printFormattedNumber(int num) {
