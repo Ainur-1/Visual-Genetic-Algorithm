@@ -119,10 +119,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CubicEquation.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="GenePool.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="UpgradeLog.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CubicEquation.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="GenePool.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
