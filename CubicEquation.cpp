@@ -39,3 +39,7 @@ std::array<double, 3> CubicEquation::solve() {
 std::array<double, 3> CubicEquation::getRoots() const {
     return roots_;
 }
+
+std::array<int, 4> CubicEquation::getCoefficients() const{
+    return coefficients_;
+}

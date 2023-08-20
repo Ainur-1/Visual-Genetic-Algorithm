@@ -3,6 +3,9 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
+#include "CubicEquation.h"
+#include "Entity.h"
+#include "GenePool.h"
 
 // Вывод числа в формате с отступами
 void printFormattedNumber(int num) {
@@ -44,41 +47,6 @@ std::array<std::array<int, 4>, 10> initial_population() {
     return new_popul;
 }
 
-// Решение кубического уравнения
-std::array<double, 3> solveCubicEquation(const std::array<int, 4>& coefficients) {
-    double a = coefficients[0];
-    double b = coefficients[1];
-    double c = coefficients[2];
-    double d = coefficients[3];
-
-    // Calculate discriminants and intermediate values
-    double discriminant = 18 * a * b * c * d - 4 * b * b * b * d + b * b * c * c - 4 * a * c * c * c - 27 * a * a * d * d;
-    double delta0 = b * b - 3 * a * c;
-    double delta1 = 2 * b * b * b - 9 * a * b * c + 27 * a * a * d;
-
-    // Calculate roots
-    std::array<double, 3> roots;
-
-    if (discriminant > 0) {
-        double C = cbrt((delta1 + sqrt(discriminant)) / 2.0);
-        double D = cbrt((delta1 - sqrt(discriminant)) / 2.0);
-        roots[0] = (-b + C + D) / (3 * a);
-    }
-    else if (discriminant == 0) {
-        roots[0] = -b / (3 * a);
-    }
-    else {
-        double phi = acos(delta1 / (2 * sqrt(-delta0 * delta0 * delta0)));
-        double magnitude = 2 * sqrt(-delta0);
-        const double pi = 3.14159265358979323846; // Число π
-        roots[0] = magnitude * cos(phi / 3) - b / (3 * a);
-        roots[1] = magnitude * cos((phi + 2 * pi) / 3) - b / (3 * a);
-        roots[2] = magnitude * cos((phi + 4 * pi) / 3) - b / (3 * a);
-    }
-
-    return roots;
-}
-
 // Оценка приспособленности особей (близость к корням)
 std::array<double, 10> fitness_evaluation(const std::array<std::array<int, 4>, 10>& population,
     const std::array<double, 3>& target_roots) {
@@ -88,7 +56,8 @@ std::array<double, 10> fitness_evaluation(const std::array<std::array<int, 4>, 1
         double total_distance = 0.0;
 
         for (int j = 0; j < 3; j++) {
-            std::array<double, 3> roots = solveCubicEquation(population[i]);
+            CubicEquation entityI(population[i]);
+            std::array<double, 3> roots = entityI.solve();
             for (int k = 0; k < 3; k++) {
                 double distance = std::abs(roots[k] - target_roots[j]);
                 total_distance += distance;
@@ -182,12 +151,13 @@ int main() {
         std::cin >> coefficients[i];
     }
 
-    std::array<double, 3> roots = solveCubicEquation(coefficients); // Корни кубического уравнения
-
-
     std::cout << std::endl << "Cubic Equation: " << coefficients[0] << "x^3 + "
         << coefficients[1] << "x^2 + " << coefficients[2] << "x + " << coefficients[3] << " = 0" << std::endl;
 
+    CubicEquation equation(coefficients);
+    equation.solve();
+
+    std::array<double, 3> roots = equation.getRoots();
     std::cout << "Equation Roots: " << roots[0] << ", " << roots[1] << ", " << roots[2] << std::endl;
 
     int Generation_Number = 1;
@@ -221,7 +191,9 @@ int main() {
             std::cout << "Cubic Equation: " << bestCoefficients[0] << "x^3 + "
                 << bestCoefficients[1] << "x^2 + " << bestCoefficients[2] << "x + " << bestCoefficients[3] << " = 0" << std::endl;
 
-            std::array<double, 3> bestRoots = solveCubicEquation(bestCoefficients); // Корни уравнения
+            CubicEquation bestEntity(bestCoefficients);
+           ;
+            std::array<double, 3> bestRoots = bestEntity.solve(); // Корни уравнения
             std::cout << "Equation Roots: " << bestRoots[0] << ", " << bestRoots[1] << ", " << bestRoots[2] << std::endl;
 
             break; // Завершаем цикл после вывода результата
