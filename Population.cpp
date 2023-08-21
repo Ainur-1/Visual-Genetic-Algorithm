@@ -23,6 +23,10 @@ Population::Population(std::array<std::array<int, 4>, 10> population) {
     population_ = population;
 }
 
+const std::array<std::array<int, 4>, 10>& Population::getPopulation() const {
+    return population_;
+}
+
 // Метод для запуска генетического алгоритма
 void Population::evolve(int maxGenerations) {
     // Реализация генетического алгоритма
@@ -30,16 +34,16 @@ void Population::evolve(int maxGenerations) {
 }
 
 // Вывод текущей популяции
-void Population::printPopulation(int Generation_Number, std::array<std::array<int, 4>, 10> population) {
+void Population::printPopulation() {
 
-    std::cout << "\nGeneration " << Generation_Number << std::endl;
+    std::cout << "\nGeneration " << generationNumber << std::endl;
     std::cout << " Chromosome " << "     a   b   c   d " << "\n\n";
 
     for (int i = 0; i < 10; i++) {
         std::cout << "Individual " << i << "   ";
 
         for (int j = 0; j < 4; j++) {
-            printFormattedNumber(population[i][j]);
+            printFormattedNumber(population_[i][j]);
         }
 
         std::cout << std::endl;

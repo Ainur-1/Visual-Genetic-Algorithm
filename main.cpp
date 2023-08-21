@@ -7,46 +7,6 @@
 #include "Entity.h"
 #include "Population.h"
 
-// Вывод числа в формате с отступами
-void printFormattedNumber(int num) {
-    if (num == 100)
-        std::cout << num << " ";
-    else if (num < 10)
-        std::cout << "  " << num << " ";
-    else if (num >= 10 && num < 100)
-        std::cout << " " << num << " ";
-}
-
-// Вывод текущей популяции
-void printPopulation(int Generation_Number, std::array<std::array<int, 4>, 10> new_popul) {
-
-    std::cout << "\nGeneration " << Generation_Number << std::endl;
-    std::cout << " Chromosome " << "     a   b   c   d " << "\n\n";
-
-    for (int i = 0; i < 10; i++) {
-        std::cout << "Individual " << i << "   ";
-
-        for (int j = 0; j < 4; j++) {
-            printFormattedNumber(new_popul[i][j]);
-        }
-
-        std::cout << std::endl;
-    }
-}
-
-// Генерация начальной популяции с случайными коэффициентами
-std::array<std::array<int, 4>, 10> initial_population() {
-    std::array<std::array<int, 4>, 10> new_popul;
-
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 4; j++) {
-            new_popul[i][j] = rand() % 101;
-        }
-    }
-
-    return new_popul;
-}
-
 // Оценка приспособленности особей (близость к корням)
 std::array<double, 10> fitness_evaluation(const std::array<std::array<int, 4>, 10>& population,
     const std::array<double, 3>& target_roots) {
@@ -160,11 +120,14 @@ int main() {
     std::array<double, 3> roots = equation.getRoots();
     std::cout << "Equation Roots: " << roots[0] << ", " << roots[1] << ", " << roots[2] << std::endl;
 
+    Population newPopul;
+    newPopul.printPopulation();
+
     int Generation_Number = 1;
+    std::array<std::array<int, 4>, 10> new_popul = newPopul.getPopulation();
+
     std::array<int, 5> sellist; // Массив наиболее приспособленных.
 
-    std::array<std::array<int, 4>, 10> new_popul = initial_population();
-    printPopulation(Generation_Number, new_popul);
 
     // Основной цикл генетического алгоритма
     while (true) {

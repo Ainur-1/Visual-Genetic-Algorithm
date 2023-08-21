@@ -8,9 +8,10 @@ public:
     Population(); 
     Population(std::array<std::array<int, 4>, 10> population);
 
-    void evolve(int maxGenerations); // Запуск генетического алгоритма
-    void printPopulation(int Generation_Number, std::array<std::array<int, 4>, 10> population);
+    const std::array<std::array<int, 4>, 10>& getPopulation() const;
 
+    void printPopulation();
+    void evolve(int maxGenerations); // Запуск генетического алгоритма
 
 private:
     int generationNumber;
