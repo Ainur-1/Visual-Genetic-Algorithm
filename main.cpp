@@ -111,15 +111,11 @@ int main() {
         std::cin >> coefficients[i];
     }
 
-    std::cout << std::endl << "Cubic Equation: " << coefficients[0] << "x^3 + "
-        << coefficients[1] << "x^2 + " << coefficients[2] << "x + " << coefficients[3] << " = 0" << std::endl;
+    Entity targetEquation(coefficients);
+    targetEquation.printEquation();
 
-    CubicEquation equation(coefficients);
-    equation.solve();
-
-    std::array<double, 3> roots = equation.getRoots();
-    std::cout << "Equation Roots: " << roots[0] << ", " << roots[1] << ", " << roots[2] << std::endl;
-
+    std::array<double, 3> roots = targetEquation.getRoots();
+    
     Population newPopul;
     newPopul.printPopulation();
 
