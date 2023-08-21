@@ -4,22 +4,23 @@
 #include <ctime>
 #include <cmath>
 
-// Здесь вы можете определить методы класса Population
-
-// Конструктор
+// Конструкторы
 Population::Population() {
-    // Инициализация случайного генератора
     srand(time(NULL));
+
+    generationNumber = 1;
+
+    for (int i = 0; i < 10; i++) {
+
+        for (int j = 0; j < 4; j++) {
+            population_[i][j] = rand() % 101;
+        }
+    }   
 }
 
-// Деструктор
-Population::~Population() {
-    // Здесь может быть необходимый код для освобождения ресурсов
-}
-
-// Метод инициализации начальной популяции
-void Population::initialize() {
-    // Реализация инициализации начальной популяции
+Population::Population(std::array<std::array<int, 4>, 10> population) {
+    generationNumber = 1;
+    population_ = population;
 }
 
 // Метод для запуска генетического алгоритма
@@ -29,7 +30,7 @@ void Population::evolve(int maxGenerations) {
 }
 
 // Вывод текущей популяции
-void printPopulation(int Generation_Number, std::array<std::array<int, 4>, 10> new_popul) {
+void Population::printPopulation(int Generation_Number, std::array<std::array<int, 4>, 10> population) {
 
     std::cout << "\nGeneration " << Generation_Number << std::endl;
     std::cout << " Chromosome " << "     a   b   c   d " << "\n\n";
@@ -38,7 +39,7 @@ void printPopulation(int Generation_Number, std::array<std::array<int, 4>, 10> n
         std::cout << "Individual " << i << "   ";
 
         for (int j = 0; j < 4; j++) {
-            printFormattedNumber(new_popul[i][j]);
+            printFormattedNumber(population[i][j]);
         }
 
         std::cout << std::endl;
@@ -47,7 +48,7 @@ void printPopulation(int Generation_Number, std::array<std::array<int, 4>, 10> n
 }
 
 // Вывод числа в формате с отступами
-void printFormattedNumber(int num) {
+void Population::printFormattedNumber(int num) {
     if (num == 100)
         std::cout << num << " ";
     else if (num < 10)

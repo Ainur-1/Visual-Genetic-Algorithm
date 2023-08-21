@@ -4,16 +4,16 @@
 
 class Population {
 public:
-    Population(); // Конструктор
-    ~Population(); // Деструктор
+    // Конструкторы
+    Population(); 
+    Population(std::array<std::array<int, 4>, 10> population);
 
-    void initialize(); // Инициализация начальной популяции
     void evolve(int maxGenerations); // Запуск генетического алгоритма
-
-    void printPopulation(int Generation_Number, std::array<std::array<int, 4>, 10> new_popul);
+    void printPopulation(int Generation_Number, std::array<std::array<int, 4>, 10> population);
 
 
 private:
-    int Generation_Number;
+    int generationNumber;
+    std::array<std::array<int, 4>, 10> population_;
     void printFormattedNumber(int num);
 };
