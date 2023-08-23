@@ -7,29 +7,6 @@
 #include "Entity.h"
 #include "Population.h"
 
-// Оценка приспособленности особей (близость к корням)
-std::array<double, 10> fitness_evaluation(const std::array<std::array<int, 4>, 10>& population,
-    const std::array<double, 3>& target_roots) {
-    std::array<double, 10> fitness;
-
-    for (int i = 0; i < 10; i++) {
-        double total_distance = 0.0;
-
-        for (int j = 0; j < 3; j++) {
-            CubicEquation entityI(population[i]);
-            std::array<double, 3> roots = entityI.solve();
-            for (int k = 0; k < 3; k++) {
-                double distance = std::abs(roots[k] - target_roots[j]);
-                total_distance += distance;
-            }
-        }
-
-        fitness[i] = 1.0 / total_distance;
-    }
-
-    return fitness;
-}
-
 // Выбор особей для следующего поколения
 std::array<int, 5> selection(const std::array<double, 10>& fitness) {
     std::array<int, 5> sellist;
@@ -62,8 +39,8 @@ std::array<int, 5> selection(const std::array<double, 10>& fitness) {
 }
 
 // Создание новой популяции на основе выбранных особей
-std::array<std::array<int, 4>, 10> createNewPopulation(const std::array<std::array<int, 4>, 10>& old_popul, const std::array<int, 5>& sellist) {
-    std::array<std::array<int, 4>, 10> new_popul;
+std::array<Entity, 10> createNewPopulation(const std::array<Entity, 10>& old_popul, const std::array<int, 5>& sellist) {
+    std::array<Entity, 10> new_popul;
 
     // Копирование выбранных особей в новую популяцию
     for (int i = 0; i < 5; i++) {
@@ -72,24 +49,7 @@ std::array<std::array<int, 4>, 10> createNewPopulation(const std::array<std::arr
 
     // Генерация новых особей (потомков) через скрещивание
     for (int i = 5; i < 10; i++) {
-        int parent1Index = rand() % 5; // Выбор случайного родителя из выбранных особей
-        int parent2Index = rand() % 5; // Выбор еще одного случайного родителя из выбранных особей
-
-        // Производим скрещивание (можно использовать простое скрещивание с одной точкой)
-        int crossoverPoint = rand() % 4; // Выбор случайной точки скрещивания
-
-        for (int j = 0; j < 4; j++) {
-            if (j < crossoverPoint) {
-                new_popul[i][j] = old_popul[sellist[parent1Index]][j];
-            }
-            else {
-                new_popul[i][j] = old_popul[sellist[parent2Index]][j];
-            }
-        }
-
-        // Производим мутацию
-        int mutationGeneIndex = rand() % 4; // Выбор случайного гена для мутации
-        new_popul[i][mutationGeneIndex] = rand() % 101; // Мутируем ген случайным значением
+        new_popul[i] = Entity::Entity();
     }
 
     return new_popul;
@@ -120,7 +80,7 @@ int main() {
     newPopul.printPopulation();
 
     int Generation_Number = 1;
-    std::array<std::array<int, 4>, 10> new_popul = newPopul.getPopulation();
+    std::array<Entity, 10> new_popul = newPopul.getPopulation();
 
     std::array<int, 5> sellist; // Массив наиболее приспособленных.
 
@@ -128,7 +88,7 @@ int main() {
     // Основной цикл генетического алгоритма
     while (true) {
         // Оценка приспособленности
-        std::array<double, 10> fitness_values = fitness_evaluation(new_popul, roots);
+        std::array<double, 10> fitness_values = newPopul.calculateFitness(roots);
 
         // Выбор особей для следующего поколения
         sellist = selection(fitness_values);
@@ -144,7 +104,7 @@ int main() {
         // После определенного количества поколений, выводим наилучшее уравнение
         if (Generation_Number == MAX_GENERATIONS) {
             int bestIndividualIndex = sellist[0]; // Индекс самой приспособленной особи
-            std::array<int, 4> bestCoefficients = new_popul[bestIndividualIndex]; // Коэффициенты этой особи
+            std::array<int, 4> bestCoefficients = new_popul[bestIndividualIndex].getCoefficients(); // Коэффициенты этой особи
 
             std::cout << "\nBest Equation after " << MAX_GENERATIONS << " Generations:\n";
             std::cout << "Cubic Equation: " << bestCoefficients[0] << "x^3 + "

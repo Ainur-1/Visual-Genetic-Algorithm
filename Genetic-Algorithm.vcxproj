@@ -123,6 +123,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Population.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Selection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="UpgradeLog.htm" />
@@ -131,6 +132,7 @@
     <ClInclude Include="CubicEquation.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Population.h" />
+    <ClInclude Include="Selection.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

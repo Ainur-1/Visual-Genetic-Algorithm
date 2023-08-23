@@ -1,4 +1,5 @@
 #include "Population.h"
+#include "Entity.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -6,24 +7,20 @@
 
 // Конструкторы
 Population::Population() {
-    srand(time(NULL));
-
     generationNumber = 1;
 
     for (int i = 0; i < 10; i++) {
 
-        for (int j = 0; j < 4; j++) {
-            population_[i][j] = rand() % 101;
-        }
-    }   
+        population_[i] = Entity::Entity();
+    }
 }
 
-Population::Population(std::array<std::array<int, 4>, 10> population) {
+Population::Population(std::array<Entity, 10> newPopulation) {
     generationNumber = 1;
-    population_ = population;
+    population_ = newPopulation;
 }
 
-const std::array<std::array<int, 4>, 10>& Population::getPopulation() const {
+const std::array<Entity, 10>& Population::getPopulation() const {
     return population_;
 }
 
@@ -31,6 +28,26 @@ const std::array<std::array<int, 4>, 10>& Population::getPopulation() const {
 void Population::evolve(int maxGenerations) {
     // Реализация генетического алгоритма
     // Включая создание, оценку приспособленности, выбор и создание новой популяции
+}
+
+// Оценка приспособленности особей (близость к корням)
+std::array<double, 10> Population::calculateFitness(std::array<double, 3> target_roots) {
+    for (int i = 0; i < 10; i++) {
+        double total_distance = 0.0;
+
+        for (int j = 0; j < 3; j++) {
+            std::array<double, 3> roots = population_[i].getRoots();
+
+            for (int k = 0; k < 3; k++) {
+                double distance = std::abs(roots[k] - target_roots[j]);
+                total_distance += distance;
+            }
+        }
+
+        fitness[i] = 1.0 / total_distance;
+    }
+
+    return fitness;
 }
 
 // Вывод текущей популяции
