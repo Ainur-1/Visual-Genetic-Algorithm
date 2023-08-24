@@ -25,9 +25,24 @@ const std::array<Entity, 10>& Population::getPopulation() const {
 }
 
 // Метод для запуска генетического алгоритма
-void Population::evolve(int maxGenerations) {
-    // Реализация генетического алгоритма
-    // Включая создание, оценку приспособленности, выбор и создание новой популяции
+std::array<Entity, 10> Population::evolve() {
+    std::array<Entity, 10> new_popul;
+
+    // Копирование выбранных особей в новую популяцию
+    for (int i = 0; i < 5; i++) {
+        new_popul[i] = population_[sellist[i]];
+    }
+
+    // Генерация новых особей (потомков) через скрещивание
+    for (int i = 5; i < 10; i++) {
+        new_popul[i] = Entity::Entity();
+    }
+    
+    for (int i = 0; i < 10; i++) {
+        population_[i] = new_popul[i];
+    }
+
+    return population_;
 }
 
 // Оценка приспособленности особей (близость к корням)
@@ -48,6 +63,37 @@ std::array<double, 10> Population::calculateFitness(std::array<double, 3> target
     }
 
     return fitness;
+}
+
+// Выбор особей для следующего поколения
+std::array<int, 5> Population::selection() {
+    std::array<int, 5> sellist;
+
+    for (int i = 0; i < 5; i++) {
+        int maxIndex = 0;
+        double maxFitness = -1.0;
+
+        for (int j = 0; j < 10; j++) {
+            if (fitness[j] > maxFitness) {
+                bool isAlreadySelected = false;
+                for (int k = 0; k < i; k++) {
+                    if (sellist[k] == j) {
+                        isAlreadySelected = true;
+                        break;
+                    }
+                }
+
+                if (!isAlreadySelected) {
+                    maxIndex = j;
+                    maxFitness = fitness[j];
+                }
+            }
+        }
+
+        sellist[i] = maxIndex;
+    }
+
+    return sellist;
 }
 
 // Вывод текущей популяции

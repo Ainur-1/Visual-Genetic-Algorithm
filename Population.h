@@ -13,10 +13,12 @@ public:
 
     void printPopulation();
     std::array<double, 10> calculateFitness(std::array<double,3> targetRoots);
-    void evolve(int maxGenerations); // Запуск генетического алгоритма
+    std::array<int, 5> Population::selection();
+    std::array<Entity, 10> Population::evolve(); // Запуск генетического алгоритма
 
 private:
     int generationNumber;
+    std::array<int, 5> sellist;
     std::array<double, 10> fitness;
     std::array<Entity, 10> population_;
     void printFormattedNumber(int num);

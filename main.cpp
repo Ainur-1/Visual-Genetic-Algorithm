@@ -7,55 +7,6 @@
 #include "Entity.h"
 #include "Population.h"
 
-// Выбор особей для следующего поколения
-std::array<int, 5> selection(const std::array<double, 10>& fitness) {
-    std::array<int, 5> sellist;
-
-    for (int i = 0; i < 5; i++) {
-        int maxIndex = 0;
-        double maxFitness = -1.0;
-
-        for (int j = 0; j < 10; j++) {
-            if (fitness[j] > maxFitness) {
-                bool isAlreadySelected = false;
-                for (int k = 0; k < i; k++) {
-                    if (sellist[k] == j) {
-                        isAlreadySelected = true;
-                        break;
-                    }
-                }
-
-                if (!isAlreadySelected) {
-                    maxIndex = j;
-                    maxFitness = fitness[j];
-                }
-            }
-        }
-
-        sellist[i] = maxIndex;
-    }
-
-    return sellist;
-}
-
-// Создание новой популяции на основе выбранных особей
-std::array<Entity, 10> createNewPopulation(const std::array<Entity, 10>& old_popul, const std::array<int, 5>& sellist) {
-    std::array<Entity, 10> new_popul;
-
-    // Копирование выбранных особей в новую популяцию
-    for (int i = 0; i < 5; i++) {
-        new_popul[i] = old_popul[sellist[i]];
-    }
-
-    // Генерация новых особей (потомков) через скрещивание
-    for (int i = 5; i < 10; i++) {
-        new_popul[i] = Entity::Entity();
-    }
-
-    return new_popul;
-}
-
-
 int main() {
     srand(time(NULL));
 
@@ -88,16 +39,13 @@ int main() {
     // Основной цикл генетического алгоритма
     while (true) {
         // Оценка приспособленности
-        std::array<double, 10> fitness_values = newPopul.calculateFitness(roots);
+        newPopul.calculateFitness(roots);
 
         // Выбор особей для следующего поколения
-        sellist = selection(fitness_values);
-        
-        /*По логике будет 5 прислпособленнейших и генерироваться 5 новых.
-    Также мутация будет менят некоторыхе хромосомы в некоторых особях, которое будет выбираться рандомом.*/
+        sellist = newPopul.selection();
 
         // Создание новой популяции на основе выбранных особей
-        new_popul = createNewPopulation(new_popul, sellist);
+        new_popul = newPopul.evolve();
 
         Generation_Number++;
 
