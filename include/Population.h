@@ -21,5 +21,4 @@ private:
     std::array<int, 5> sellist;
     std::array<double, 10> fitness;
     std::array<Entity, 10> population_;
-    void printFormattedNumber(int num);
 };

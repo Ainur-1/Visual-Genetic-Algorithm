@@ -16,9 +16,11 @@ public:
     void mutate();
     Entity crossover(const Entity& other) const;
     void printEquation();
+    void printEntity();
 
 private:
     std::array<int, 4> coefficients;
     std::array<double, 3> roots;
+    void printFormattedNumber(int num);
 };
 

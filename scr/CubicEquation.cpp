@@ -1,4 +1,4 @@
-#include "CubicEquation.h"
+#include "../include/CubicEquation.h"
 #include <cmath>
 
 CubicEquation::CubicEquation(const std::array<int, 4>& coefficients)

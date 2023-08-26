@@ -1,5 +1,5 @@
-#include "Entity.h"
-#include "CubicEquation.h"
+#include "../include/Entity.h"
+#include "../include/CubicEquation.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -56,4 +56,20 @@ void Entity::printEquation() {
         << coefficients[1] << "x^2 + " << coefficients[2] << "x + " << coefficients[3] << " = 0" << std::endl;
 
     std::cout << "Equation Roots: " << roots[0] << ", " << roots[1] << ", " << roots[2] << std::endl;
+}
+
+void Entity::printEntity() {
+    for (int i = 0; i < 4; i++) {
+        printFormattedNumber(coefficients[i]);
+    }
+}
+
+// Вывод числа в формате с отступами
+void Entity::printFormattedNumber(int num) {
+    if (num == 100)
+        std::cout << num << " ";
+    else if (num < 10)
+        std::cout << "  " << num << " ";
+    else if (num >= 10 && num < 100)
+        std::cout << " " << num << " ";
 }

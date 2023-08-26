@@ -1,5 +1,5 @@
-#include "Population.h"
-#include "Entity.h"
+#include "../include/Population.h"
+#include "../include/Entity.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -104,22 +104,7 @@ void Population::printPopulation() {
 
     for (int i = 0; i < 10; i++) {
         std::cout << "Individual " << i << "   ";
-
-        for (int j = 0; j < 4; j++) {
-            printFormattedNumber(population_[i][j]);
-        }
-
+        population_[i].printEntity();
         std::cout << std::endl;
     }
-
-}
-
-// Вывод числа в формате с отступами
-void Population::printFormattedNumber(int num) {
-    if (num == 100)
-        std::cout << num << " ";
-    else if (num < 10)
-        std::cout << "  " << num << " ";
-    else if (num >= 10 && num < 100)
-        std::cout << " " << num << " ";
 }

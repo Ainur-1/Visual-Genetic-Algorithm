@@ -1,15 +1,10 @@
 ﻿#include <iostream>
 #include <array>
-#include <cstdlib>
-#include <ctime>
-#include <cmath>
-#include "CubicEquation.h"
-#include "Entity.h"
-#include "Population.h"
+#include "include/CubicEquation.h"
+#include "include/Entity.h"
+#include "include/Population.h"
 
 int main() {
-    srand(time(NULL));
-
     const int MAX_GENERATIONS = 100; // Максимальное количество поколений
 
     std::cout << "New Genetic Algorithm for Cubic Equation\n\n";
@@ -34,7 +29,6 @@ int main() {
     std::array<Entity, 10> new_popul = newPopul.getPopulation();
 
     std::array<int, 5> sellist; // Массив наиболее приспособленных.
-
 
     // Основной цикл генетического алгоритма
     while (true) {
@@ -66,7 +60,6 @@ int main() {
             break; // Завершаем цикл после вывода результата
         }
     }
-
 
     return 0;
 }

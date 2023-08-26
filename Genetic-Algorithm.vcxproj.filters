@@ -18,13 +18,13 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
+    <ClCompile Include="scr\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Population.cpp">
+    <ClCompile Include="scr\Population.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CubicEquation.cpp">
+    <ClCompile Include="scr\CubicEquation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,13 +32,13 @@
     <None Include="UpgradeLog.htm" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Entity.h">
+    <ClInclude Include="include\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Population.h">
+    <ClInclude Include="include\Population.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CubicEquation.h">
+    <ClInclude Include="include\CubicEquation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
