@@ -119,10 +119,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\CubicEquation.cpp" />
+    <ClCompile Include="scr\Entity.cpp" />
+    <ClCompile Include="scr\Population.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="UpgradeLog.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\CubicEquation.h" />
+    <ClInclude Include="include\Entity.h" />
+    <ClInclude Include="include\Population.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
